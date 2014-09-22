@@ -22,14 +22,21 @@ class Network():
 		#self.weights = [np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
 		#self.biases = [np.random.randn(y,1) for y in sizes[1:]]
 
-	def apply(self,a_i):
-		a=np.array(a_i)
+	def apply(self,a_i,batch=False):
 
-		#MUDAR ISTO PARA LIST COMPREHENSION
-		for w,b in zip(self.weights,self.biases):
-			a=sigmoid_vec(np.dot(w,a)+b)
+		if batch == False:
+			a=np.array(a_i)
 
-		#print "output a=\n%s" % a
+			#MUDAR ISTO PARA LIST COMPREHENSION
+			for w,b in zip(self.weights,self.biases):
+				a=sigmoid_vec(np.dot(w,a)+b)
+
+		if batch == True:
+			a=[np.array(a_k) for a_k in a_i]
+			for i in range(len(a)):
+				for w,b in zip(self.weights,self.biases):
+					a[i]=sigmoid_vec(np.dot(w,a[i])+b)
+
 		return a
 
 	def feed_forward(self,a_i):
@@ -40,9 +47,6 @@ class Network():
 			#print "w=\n%s\nb=\n%s" % (w,b)
 			a.append(sigmoid_vec(np.dot(w,a[-1])+b))
 
-		print "output a="
-		pprint(a)
-		print "desired = %s" % generating_function(a[0])
 		return a
 
 	def backprop(self,x,y):
@@ -73,6 +77,7 @@ class Network():
 		params is a list of tuples (delta,a_mat)
 		each entry corresponds to a training example (x,y)
 		"""
+		#passar isto para list comprehension
 		for x,y in training_set:
 			#print self.backprop(x,y)
 			params.append(self.backprop(x,y))
@@ -90,14 +95,26 @@ class Network():
 
 		#print "new weights=\n%s \nnew biases=\n%s" % (self.weights,self.biases)
 
+	def sgd(self,training_set,eta,epochs=1,mini_batch_size=10):
+		"""
+		training_set must be a list of tuples (x,y)
+		x is the input
+		y is the desired output
+		"""
 
+		for k in range(len(training_set)/mini_batch_size):
 
-"""
-Training the OR function
-"""
-"""
-training_set = [([1,0],[1]),([0,1],[1]),([0,0],[0]),([1,1],[1])]
-net = Network([2,2,1])
-for i in range(0,100):
-	net.gd(training_set,5.0)
-"""
+			#	Pick mini_batch_size training examples from the training set
+			mini_batch = [self.backprop(x,y) for x,y in training_set[k:k+mini_batch_size]]
+
+			for i in xrange(self.num_layers-1):
+				weights_update = np.zeros(self.weights[i].shape)
+				biases_update = np.zeros(self.biases[i].shape)
+				for delta, a_mat in mini_batch:
+					weights_update += vvT(delta[i],a_mat[i])
+					biases_update += delta[i]
+
+				self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
+				self.biases[i] = self.biases[i] - (eta/len(training_set))*biases_update
+
+		

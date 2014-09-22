@@ -2,7 +2,7 @@ from random import random
 import numpy as np
 
 def generating_function(vec):
-	return sum(vec)/float(len(vec))
+	return [sum(vec)/float(len(vec))]
 	#return [np.sin(vec[0])]
 
 def generate(size,dim):

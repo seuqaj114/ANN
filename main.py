@@ -8,14 +8,14 @@ from pprint import pprint
 import misc
 
 if __name__ == "__main__":
-	newtork_geometry = [6,20,1]
-	training_set = generate(30,6)
+	newtork_geometry = [6,30,1]
+	training_set = generate(100,6)
 	net = network.Network(newtork_geometry)
 
 	start = time.time()
 
 	#	Training
-	for i in range(0,200):
+	for i in range(0,1):
 		net.sgd(training_set,2.0)
 
 		output_set = net.apply([t[0] for t in training_set],True)
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 		print desired_set
 		print "error=%s" % error
 
-		if error < 0.1:
+		if error < 0.3:
 			print "epochs: %s" % (i)
 			break
 

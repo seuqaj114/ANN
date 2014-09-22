@@ -2,13 +2,7 @@ import random
 import numpy as np 
 from generate import *
 from pprint import pprint
-
-# v1*v2T
-def vvT(v1,v2):
-	return v1.reshape((len(v1),1))*np.tile(v2,(len(v1),1))
-
-def sigmoid(z):
-	return 1.0/(1.0+np.exp(-z))
+from misc import sigmoid, vvT
 
 sigmoid_vec = np.vectorize(sigmoid)
 
@@ -27,11 +21,10 @@ class Network():
 		if batch == False:
 			a=np.array(a_i)
 
-			#MUDAR ISTO PARA LIST COMPREHENSION
 			for w,b in zip(self.weights,self.biases):
 				a=sigmoid_vec(np.dot(w,a)+b)
 
-		if batch == True:
+		elif batch == True:
 			a=[np.array(a_k) for a_k in a_i]
 			for i in range(len(a)):
 				for w,b in zip(self.weights,self.biases):
@@ -42,9 +35,7 @@ class Network():
 	def feed_forward(self,a_i):
 		a=[np.array(a_i)]
 
-		#MUDAR ISTO PARA LIST COMPREHENSION
 		for w,b in zip(self.weights,self.biases):
-			#print "w=\n%s\nb=\n%s" % (w,b)
 			a.append(sigmoid_vec(np.dot(w,a[-1])+b))
 
 		return a
@@ -53,16 +44,11 @@ class Network():
 		delta=[]
 
 		a_mat = self.feed_forward(x)
-		
-		#delta.append((a_mat[-1]-y)*(a_mat[-1]*(1-a_mat[-1])))
 		delta.append(a_mat[-1]-y)
 
-		#MUDAR ISTO PARA LIST COMPREHENSION
 		for w,a in zip(self.weights[-1:0:-1],a_mat[-2:0:-1]):
-			#delta.append(np.dot(w.transpose(),delta[-1])*a)
 			delta.append(np.dot(w.transpose(),delta[-1]))
 
-		#print delta[-1::-1]
 		return delta[-1::-1], a_mat
 
 	def bgd(self,training_set,eta):
@@ -72,16 +58,11 @@ class Network():
 		y is the desired output
 		"""
 
-		params=[]
 		"""
 		params is a list of tuples (delta,a_mat)
 		each entry corresponds to a training example (x,y)
 		"""
-		#passar isto para list comprehension
-		for x,y in training_set:
-			#print self.backprop(x,y)
-			params.append(self.backprop(x,y))
-
+		params=[self.backprop(x,y) for x,y in training_set]	
 
 		for i in xrange(self.num_layers-1):
 			weights_update = np.zeros(self.weights[i].shape)
@@ -92,8 +73,6 @@ class Network():
 
 			self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
 			self.biases[i] = self.biases[i] - (eta/len(training_set))*biases_update
-
-		#print "new weights=\n%s \nnew biases=\n%s" % (self.weights,self.biases)
 
 	def sgd(self,training_set,eta,mini_batch_size=5):
 		"""

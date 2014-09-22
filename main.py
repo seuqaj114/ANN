@@ -15,19 +15,22 @@ if __name__ == "__main__":
 	start = time.time()
 
 	#	Training
-	for i in range(0,100):
+	for i in range(0,200):
 		net.sgd(training_set,2.0)
 
 		output_set = net.apply([t[0] for t in training_set],True)
 		desired_set = [t[1] for t in training_set]
+		error = misc.set_norm(output_set,desired_set)
 
 		print "output=\n"
 		print output_set
 		print "desired=\n"
 		print desired_set
+		print "error=%s" % error
 
-		print "error=%s" % misc.set_norm(output_set,desired_set)
-
+		if error < 0.1:
+			print "epochs: %s" % (i)
+			break
 
 	finish = time.time()
 

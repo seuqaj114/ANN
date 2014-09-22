@@ -95,7 +95,7 @@ class Network():
 
 		#print "new weights=\n%s \nnew biases=\n%s" % (self.weights,self.biases)
 
-	def sgd(self,training_set,eta,epochs=1,mini_batch_size=10):
+	def sgd(self,training_set,eta,mini_batch_size=5):
 		"""
 		training_set must be a list of tuples (x,y)
 		x is the input

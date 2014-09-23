@@ -11,7 +11,6 @@ class Network():
 		self.num_layers = len(sizes)
 		self.sizes = sizes
 		self.weights = [np.ones((y,x))*0.3 for x,y in zip(sizes[:-1],sizes[1:])]
-		print "weights=\n%s" % self.weights
 		self.biases = [np.arange(y) for y in sizes[1:]]
 		#self.weights = [np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
 		#self.biases = [np.random.randn(y,1) for y in sizes[1:]]
@@ -33,12 +32,12 @@ class Network():
 		return a
 
 	def feed_forward(self,a_i):
-		a=[np.array(a_i)]
+		a_mat=[np.array(a_i)]
 
 		for w,b in zip(self.weights,self.biases):
-			a.append(sigmoid_vec(np.dot(w,a[-1])+b))
+			a_mat.append(sigmoid_vec(np.dot(w,a_mat[-1])+b))
 
-		return a
+		return a_mat
 
 	def backprop(self,x,y):
 		delta=[]
@@ -62,12 +61,12 @@ class Network():
 		params is a list of tuples (delta,a_mat)
 		each entry corresponds to a training example (x,y)
 		"""
-		params=[self.backprop(x,y) for x,y in training_set]	
+		backprop_params=[self.backprop(x,y) for x,y in training_set]	
 
 		for i in xrange(self.num_layers-1):
 			weights_update = np.zeros(self.weights[i].shape)
 			biases_update = np.zeros(self.biases[i].shape)
-			for delta, a_mat in params:
+			for delta, a_mat in backprop_params:
 				weights_update += vvT(delta[i],a_mat[i])
 				biases_update += delta[i]
 

@@ -4,10 +4,13 @@ import time
 
 import network
 from generate import generate
+import sys
+
 from pprint import pprint
 import misc
 
 if __name__ == "__main__":
+
 	newtork_geometry = [6,30,1]
 	training_set = generate(100,6)
 	net = network.Network(newtork_geometry)

@@ -94,5 +94,3 @@ class Network():
 
 				self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
 				self.biases[i] = self.biases[i] - (eta/len(training_set))*biases_update
-
-		

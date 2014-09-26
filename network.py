@@ -1,4 +1,4 @@
-import random
+from random import random
 import numpy as np 
 from generate import *
 from pprint import pprint
@@ -10,9 +10,13 @@ class Network():
 	def __init__(self,sizes):
 		self.num_layers = len(sizes)
 		self.sizes = sizes
-		self.weights = [np.ones((y,x))*0.3 for x,y in zip(sizes[:-1],sizes[1:])]
-		self.biases = [np.arange(y) for y in sizes[1:]]
-		#self.weights = [np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
+
+		#self.biases=[np.array([-90, -40]), np.array([-30.0])]
+		#self.weights= [np.array([[ 60.0,  60.0],[ 80.0,  80.0]]), np.array([[ -60.0, 60.0  ]])]
+
+		#self.weights = [np.ones((y,x))*50.0 for x,y in zip(sizes[:-1],sizes[1:])]
+		self.biases = [np.array([random() for i in range(y)]) for y in sizes[1:]]
+		self.weights = [np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
 		#self.biases = [np.random.randn(y,1) for y in sizes[1:]]
 
 	def apply(self,a_i,batch=False):
@@ -62,13 +66,21 @@ class Network():
 		each entry corresponds to a training example (x,y)
 		"""
 		backprop_params=[self.backprop(x,y) for x,y in training_set]	
+		#pprint(backprop_params)
 
 		for i in xrange(self.num_layers-1):
 			weights_update = np.zeros(self.weights[i].shape)
 			biases_update = np.zeros(self.biases[i].shape)
 			for delta, a_mat in backprop_params:
 				weights_update += vvT(delta[i],a_mat[i])
+				#print "delta[%s] %s" % (i,delta[i])
+				#print "a_mat[%s] %s" % (i,a_mat[i])
+				#print "vvT[%s] %s" % (i,vvT(delta[i],a_mat[i]))
 				biases_update += delta[i]
+
+
+			#print "weights %s" % weights_update
+			#print "biases %s" % biases_update
 
 			self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
 			self.biases[i] = self.biases[i] - (eta/len(training_set))*biases_update

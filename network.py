@@ -85,7 +85,7 @@ class Network():
 			self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
 			self.biases[i] = self.biases[i] - (eta/len(training_set))*biases_update
 
-	def sgd(self,training_set,eta,mini_batch_size=5):
+	def sgd(self,training_set,eta,mini_batch_size=10):
 		"""
 		training_set must be a list of tuples (x,y)
 		x is the input
@@ -106,3 +106,15 @@ class Network():
 
 				self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
 				self.biases[i] = self.biases[i] - (eta/len(training_set))*biases_update
+
+	def train(self,training_set,eta,epochs,method):
+		if method == "bgd":
+			for i in range(epochs):
+				self.bgd(training_set,eta)
+				print "epoch: %s" % i
+		elif method == "sgd":
+			for i in range(epochs):
+				self.sgd(training_set,eta)
+				print "epoch: %s" % i
+		else:
+			print "ERROR - Allowed methods: \"bgd\", \"sgd\""

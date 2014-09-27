@@ -7,6 +7,8 @@ from selenium import webdriver
 import Image
 import numpy as np
 
+from utils import misc
+
 url = "http://192.168.1.4:8080"
 
 class Stream():
@@ -21,9 +23,10 @@ class Stream():
 
 	def collect(self,sample_size,time_gap):
 		frame_list = []
-		for i in range(sample_size):
-			time.sleep(time_gap)
 
+		misc.countdown(3)
+
+		for i in range(sample_size):
 			src = self.image.get_attribute("src")
 			print src
 
@@ -38,8 +41,11 @@ class Stream():
 			else:
 				frame_list.append(pic)
 
+			time.sleep(time_gap)
+
+
 		#np.save("data/pics.npy",frame_list)
-		print "Image list saved"
+		print "Data capture done!"
 
 
 

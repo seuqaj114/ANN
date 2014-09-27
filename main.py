@@ -7,7 +7,7 @@ from generate import generate
 import sys
 
 from pprint import pprint
-import misc
+from utils.math import set_norm
 
 if __name__ == "__main__":
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
 		output_set = net.apply([t[0] for t in training_set],True)
 		desired_set = [t[1] for t in training_set]
-		error = misc.set_norm(output_set,desired_set)
+		error = set_norm(output_set,desired_set)
 		
 		"""
 		print "\n"

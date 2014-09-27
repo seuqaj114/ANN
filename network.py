@@ -2,7 +2,7 @@ from random import random
 import numpy as np 
 from generate import *
 from pprint import pprint
-from misc import sigmoid, vvT
+from utils.math import sigmoid, vvT
 
 sigmoid_vec = np.vectorize(sigmoid)
 

@@ -1,6 +1,6 @@
 import sys
-from urllib import urlretrieve
 import time
+from urllib import urlretrieve
 
 from selenium import webdriver
 
@@ -23,6 +23,7 @@ class Stream():
 
 	def collect(self,sample_size,time_gap):
 		frame_list = []
+		output_list = []
 
 		misc.countdown(3)
 

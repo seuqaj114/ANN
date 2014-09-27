@@ -6,6 +6,12 @@ from misc import sigmoid, vvT
 
 sigmoid_vec = np.vectorize(sigmoid)
 
+def conditional_np_array(a_i):
+	if type(a_i).__name__ == "ndarray":
+		return a_i
+	elif type(a_i).__name__ == "list":
+		return np.array(a_i)
+
 class Network():
 	def __init__(self,sizes):
 		self.num_layers = len(sizes)
@@ -22,6 +28,7 @@ class Network():
 	def apply(self,a_i,batch=False):
 
 		if batch == False:
+
 			a=np.array(a_i)
 
 			for w,b in zip(self.weights,self.biases):

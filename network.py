@@ -1,16 +1,9 @@
 from random import random
 import numpy as np 
-from generate import *
 from pprint import pprint
 from utils.math import sigmoid, vvT
 
 sigmoid_vec = np.vectorize(sigmoid)
-
-def conditional_np_array(a_i):
-	if type(a_i).__name__ == "ndarray":
-		return a_i
-	elif type(a_i).__name__ == "list":
-		return np.array(a_i)
 
 class Network():
 	def __init__(self,sizes):

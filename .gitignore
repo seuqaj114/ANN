@@ -1,2 +1,3 @@
 *.pyc
 pics*.npy
+output*.npy

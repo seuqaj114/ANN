@@ -8,7 +8,7 @@ from urllib import urlretrieve
 from selenium import webdriver
 
 from utils import misc
-from albert_fixtures import sample_size
+from albert_fixtures import sample_size, url
 
 import Image
 import numpy as np
@@ -82,8 +82,6 @@ class MainWindow(QtGui.QMainWindow):
       self.timer.stop()
       print "Done!"
 
-
-url = "http://192.168.1.103:8080"
 time_step = 500 #miliseconds
 
 app = QtGui.QApplication(sys.argv)

@@ -9,7 +9,7 @@ import numpy as np
 
 from utils import misc
 
-url = "http://192.168.1.4:8080"
+url = "http://192.168.1.2:8080"
 
 class Stream():
 	#	Opens selenium firefox instance, sets resolution (TO DO) and returns driver and image element

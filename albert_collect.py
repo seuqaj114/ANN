@@ -12,11 +12,13 @@ from albert_fixtures import sample_size, url
 
 import Image
 import numpy as np
+import serial
 
 class MainWindow(QtGui.QMainWindow):
   def __init__(self,url,sample_size):
     QtGui.QMainWindow.__init__(self)
     self.setGeometry(200,200,600,400)
+    self.serial = serial.Serial("/dev/ttyACM0",9600)
 
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.timerTick)
@@ -38,22 +40,22 @@ class MainWindow(QtGui.QMainWindow):
     #print "Key pressed"
     if e.key() == 65:
       self.a[0]=1
-    elif e.key() == 87:
+    if e.key() == 87:
       self.a[1]=1
-    elif e.key() == 68:
+    if e.key() == 68:
       self.a[2]=1
-    elif e.key() == 83:
+    if e.key() == 83:
       self.a[3]=1
 
   def keyReleaseEvent(self,e):
     #print "Key released"
     if e.key() == 65:
       self.a[0]=0
-    elif e.key() == 87:
+    if e.key() == 87:
       self.a[1]=0
-    elif e.key() == 68:
+    if e.key() == 68:
       self.a[2]=0
-    elif e.key() == 83:
+    if e.key() == 83:
       self.a[3]=0
 
   def timerTick(self):
@@ -76,13 +78,21 @@ class MainWindow(QtGui.QMainWindow):
     else:
       self.frame_list.append(pic)
       self.output_list.append(self.a)
+      if self.a[0] == 1:
+        self.serial.write("a")
+      if self.a[2] == 1:
+        self.serial.write("d")  
+      if self.a[1] == 1:
+        self.serial.write("w")
+      if self.a[3] == 1:
+        self.serial.write("s")
 
     self.i += 1
     if self.i >= self.sample_size:
       self.timer.stop()
       print "Done!"
 
-time_step = 500 #miliseconds
+time_step = 1000 #miliseconds
 
 app = QtGui.QApplication(sys.argv)
 window = MainWindow(url,sample_size)

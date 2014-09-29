@@ -18,7 +18,7 @@ class MainWindow(QtGui.QMainWindow):
   def __init__(self):
     QtGui.QMainWindow.__init__(self)
     self.setGeometry(200,200,600,400)
-    self.serial = serial.Serial("/dev/ttyACM0",9600)
+    self.serial = serial.Serial("/dev/ttyACM1",9600)
 
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.timerTick)
@@ -53,24 +53,20 @@ class MainWindow(QtGui.QMainWindow):
     if self.a[1] == 1 and self.a[0] == 0 and self.a[2] == 0:
       self.serial.write("w") 
     elif self.a[1] == 1 and self.a[0] == 1 and self.a[2] == 0:
-      self.serial.write("wa")
+      self.serial.write("r") #wa
     elif self.a[1] == 1 and self.a[0] == 0 and self.a[2] == 1:
-      self.serial.write("wd")
-    if self.a[3] == 1 and self.a[0] == 0 and self.a[2] == 0:
+      self.serial.write("t") #wd
+    elif self.a[3] == 1 and self.a[0] == 0 and self.a[2] == 0:
       self.serial.write("s") 
     elif self.a[3] == 1 and self.a[0] == 1 and self.a[2] == 0:
-      self.serial.write("sa")
+      self.serial.write("y") #sa
     elif self.a[3] == 1 and self.a[0] == 0 and self.a[2] == 1:
-      self.serial.write("sd")  
-
+      self.serial.write("u")  #sd
     """
     if self.a[0] == 1:
       self.serial.write("a")
-     
     if self.a[2] == 1:
       self.serial.write("d")  
-    if self.a[3] == 1:
-      self.serial.write("s")
     """
 
 time_step = 1000 #miliseconds

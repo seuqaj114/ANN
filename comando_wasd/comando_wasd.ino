@@ -24,43 +24,45 @@ if(Serial.available()){
        delay(duration);
        analogWrite(pfrente,255);
        break;
-       
-    case 'wd':
-      analogWrite(pdirei,0);
-      delay(gap);
-      analogWrite(pfrente,0);
-      delay(duration);
-      analogWrite(pfrente,255);
-      analogWrite(pdirei,255);
-      break;
-    case 'wa':
+    case 'r':
       analogWrite(pesq,0);
       delay(gap);
       analogWrite(pfrente,0);
-      
       delay(duration);
       analogWrite(pfrente,255);
+      delay(gap);
       analogWrite(pesq,255);
       break;
-    case 'sd':
+
+    case 't':
       analogWrite(pdirei,0);
       delay(gap);
-      analogWrite(ptras,0);
-      
+      analogWrite(pfrente,0);
       delay(duration);
-      analogWrite(ptras,255);
+      analogWrite(pfrente,255);
+      delay(gap);
       analogWrite(pdirei,255);
       break;
-    case 'sa':
+    case 'y':
       analogWrite(pesq,0);
       delay(gap);
       analogWrite(ptras,0);
       
       delay(duration);
       analogWrite(ptras,255);
+      delay(gap);
       analogWrite(pesq,255);
       break;   
+    case 'u':
+      analogWrite(pdirei,0);
+      delay(gap);
+      analogWrite(ptras,0);
       
+      delay(duration);
+      analogWrite(ptras,255);
+      delay(gap);
+      analogWrite(pdirei,255);
+      break;
    case 's':
      analogWrite(ptras,0);
      delay(duration);

@@ -6,4 +6,4 @@
 network_geometry = [25344,65,4]
 epochs = 50
 sample_size = 100
-url = "http://192.168.1.103:8080"
+url = "http://192.168.1.2:8080"

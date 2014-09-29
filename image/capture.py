@@ -34,7 +34,7 @@ class Stream():
 			urlretrieve(src,"pics/captcha.jpg")
 			print "Image %s captured." % i
 			img = Image.open("pics/captcha.jpg").convert("LA")
-			pic = [t[0] for t in img.getdata()]
+			pic = [t[0]/255.0 for t in img.getdata()]
 
 			if (i+1)/10 != i/10:
 				np.save("data/pics%s.npy" % (i/10),frame_list)

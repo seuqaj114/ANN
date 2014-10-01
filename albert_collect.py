@@ -18,7 +18,7 @@ class MainWindow(QtGui.QMainWindow):
   def __init__(self,url,sample_size):
     QtGui.QMainWindow.__init__(self)
     self.setGeometry(200,200,600,400)
-    self.serial = serial.Serial("/dev/ttyACM0",9600)
+    #self.serial = serial.Serial("/dev/ttyACM2",9600)
 
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.timerTick)
@@ -78,15 +78,21 @@ class MainWindow(QtGui.QMainWindow):
     else:
       self.frame_list.append(pic)
       self.output_list.append(self.a)
-      if self.a[0] == 1:
-        self.serial.write("a")
-      if self.a[2] == 1:
-        self.serial.write("d")  
-      if self.a[1] == 1:
-        self.serial.write("w")
-      if self.a[3] == 1:
-        self.serial.write("s")
 
+      """
+      if self.a[1] == 1 and self.a[0] == 0 and self.a[2] == 0:
+        self.serial.write("w") 
+      elif self.a[1] == 1 and self.a[0] == 1 and self.a[2] == 0:
+        self.serial.write("r") #wa
+      elif self.a[1] == 1 and self.a[0] == 0 and self.a[2] == 1:
+        self.serial.write("t") #wd
+      elif self.a[3] == 1 and self.a[0] == 0 and self.a[2] == 0:
+        self.serial.write("s") 
+      elif self.a[3] == 1 and self.a[0] == 1 and self.a[2] == 0:
+        self.serial.write("y") #sa
+      elif self.a[3] == 1 and self.a[0] == 0 and self.a[2] == 1:
+        self.serial.write("u")  #sd
+      """
     self.i += 1
     if self.i >= self.sample_size:
       self.timer.stop()

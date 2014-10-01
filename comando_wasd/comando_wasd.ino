@@ -1,7 +1,9 @@
 int pfrente=5,ptras=3,pesq=6,pdirei=9;
 char comd=0;
-int duration=250;
-int gap=100;
+int duration=300;
+int durationstr=150;
+int gap=150;
+int gap2=250;
 
 void setup(){
   Serial.begin(9600);
@@ -30,7 +32,7 @@ if(Serial.available()){
       analogWrite(pfrente,0);
       delay(duration);
       analogWrite(pfrente,255);
-      delay(gap);
+      delay(gap2);
       analogWrite(pesq,255);
       break;
 
@@ -40,7 +42,7 @@ if(Serial.available()){
       analogWrite(pfrente,0);
       delay(duration);
       analogWrite(pfrente,255);
-      delay(gap);
+      delay(gap2);
       analogWrite(pdirei,255);
       break;
     case 'y':
@@ -50,7 +52,7 @@ if(Serial.available()){
       
       delay(duration);
       analogWrite(ptras,255);
-      delay(gap);
+      delay(gap2);
       analogWrite(pesq,255);
       break;   
     case 'u':
@@ -60,7 +62,7 @@ if(Serial.available()){
       
       delay(duration);
       analogWrite(ptras,255);
-      delay(gap);
+      delay(gap2);
       analogWrite(pdirei,255);
       break;
    case 's':

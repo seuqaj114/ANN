@@ -31,12 +31,9 @@ if __name__ == "__main__":
 		img = Image.open("pics/captcha.jpg").convert("LA")
 		pic = [t[0]/255.0 for t in img.getdata()]
 
-		if net.apply(pic)[0] > 0.9:
-			print "Sim"
-		else:
-			print "Nao" 
+		print net.apply(pic) 
 
-		time.sleep(1)
+		time.sleep(2)
 
 	#l = np.load("data/pics3.npy")
 	#o = np.load("data/output3.npy")

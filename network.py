@@ -50,7 +50,7 @@ class Network():
 		delta.append(a_mat[-1]-y)
 
 		for w,a in zip(self.weights[-1:0:-1],a_mat[-2:0:-1]):
-			delta.append(np.dot(w.transpose(),delta[-1]))
+			delta.append(np.dot(w.transpose(),delta[-1])*a*(1-a))
 
 		return delta[-1::-1], a_mat
 

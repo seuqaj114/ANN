@@ -18,7 +18,7 @@ class MainWindow(QtGui.QMainWindow):
   def __init__(self):
     QtGui.QMainWindow.__init__(self)
     self.setGeometry(200,200,600,400)
-    self.serial = serial.Serial("/dev/ttyACM1",9600)
+    self.serial = serial.Serial("/dev/ttyACM0",9600)
 
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.timerTick)

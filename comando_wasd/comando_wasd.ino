@@ -1,7 +1,7 @@
 int pfrente=5,ptras=3,pesq=6,pdirei=9;
 char comd=0;
 int duration=300;
-int durationstr=150;
+int durationstr=200;
 int gap=150;
 int gap2=250;
 
@@ -23,7 +23,7 @@ if(Serial.available()){
   switch(comd){
      case 'w':
        analogWrite(pfrente,0);
-       delay(duration);
+       delay(durationstr);
        analogWrite(pfrente,255);
        break;
     case 'r':
@@ -67,7 +67,7 @@ if(Serial.available()){
       break;
    case 's':
      analogWrite(ptras,0);
-     delay(duration);
+     delay(durationstr);
      analogWrite(ptras,255);
      break;
     

@@ -18,7 +18,7 @@ class MainWindow(QtGui.QMainWindow):
   def __init__(self,url,sample_size):
     QtGui.QMainWindow.__init__(self)
     self.setGeometry(200,200,600,400)
-    #self.serial = serial.Serial("/dev/ttyACM2",9600)
+    self.serial = serial.Serial("/dev/ttyACM0",9600)
 
     self.timer = QtCore.QTimer()
     self.timer.timeout.connect(self.timerTick)
@@ -72,14 +72,16 @@ class MainWindow(QtGui.QMainWindow):
     if (self.i+1)/10 != self.i/10:
       np.save("data/pics%s.npy" % (self.i/10),self.frame_list)
       np.save("data/output%s.npy" % (self.i/10),self.output_list)
+      print "Output %s" % self.output_list
       print "File %s saved" % (self.i/10)
       self.frame_list = []
       self.output_list = []
     else:
       self.frame_list.append(pic)
-      self.output_list.append(self.a)
+      self.output_list.append(list(self.a))
+      print self.output_list
 
-      """
+      
       if self.a[1] == 1 and self.a[0] == 0 and self.a[2] == 0:
         self.serial.write("w") 
       elif self.a[1] == 1 and self.a[0] == 1 and self.a[2] == 0:
@@ -92,7 +94,7 @@ class MainWindow(QtGui.QMainWindow):
         self.serial.write("y") #sa
       elif self.a[3] == 1 and self.a[0] == 0 and self.a[2] == 1:
         self.serial.write("u")  #sd
-      """
+      
     self.i += 1
     if self.i >= self.sample_size:
       self.timer.stop()

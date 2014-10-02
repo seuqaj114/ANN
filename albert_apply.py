@@ -10,12 +10,15 @@ from selenium import webdriver
 
 import Image
 import numpy as np
+import serial
 
 if __name__ == "__main__":
 	net = network.Network(network_geometry)
 	
 	net.weights, net.biases = load_session()
 	print "Parameters loaded"
+
+	serial = serial.Serial("/dev/ttyACM0",9600)
 
 	driver = webdriver.Firefox()
 	driver.get(url)
@@ -31,9 +34,24 @@ if __name__ == "__main__":
 		img = Image.open("pics/captcha.jpg").convert("LA")
 		pic = [t[0]/255.0 for t in img.getdata()]
 
-		print net.apply(pic) 
+		a = net.apply(pic)
+		print a
 
-		time.sleep(2)
+		if a[1] > 0.5 and a[0] <= 0.5 and a[2] <= 0.5:
+		  serial.write("w") 
+		elif a[1] > 0.5 and a[0] > 0.5 and a[2] <= 0.5:
+		  serial.write("r") #wa
+		elif a[1] > 0.5 and a[0] < 0.5 and a[2] > 0.5:
+		  serial.write("t") #wd
+		elif a[3] > 0.5 and a[0] <= 0.5 and a[2] <= 0.5:
+		  serial.write("s") 
+		elif a[3] > 0.5 and a[0] > 0.5 and a[2] <= 0.5:
+		  serial.write("y") #sa
+		elif a[3] > 0.5 and a[0] <= 0.5 and a[2] > 0.5:
+		  serial.write("u")  #sd
+
+
+		time.sleep(1)
 
 	#l = np.load("data/pics3.npy")
 	#o = np.load("data/output3.npy")

@@ -67,7 +67,7 @@ class MainWindow(QtGui.QMainWindow):
     urlretrieve(src,"pics/captcha.jpg")
     print "Image %s captured." % self.i
     img = Image.open("pics/captcha.jpg").convert("LA")
-    pic = [t[0] for t in img.getdata()]
+    pic = [t[0]/255.0 for t in img.getdata()]
 
     if (self.i+1)/10 != self.i/10:
       np.save("data/pics%s.npy" % (self.i/10),self.frame_list)

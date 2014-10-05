@@ -2,6 +2,7 @@
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 import sys
+import os
 import time
 from urllib import urlretrieve
 
@@ -33,7 +34,13 @@ class MainWindow(QtGui.QMainWindow):
 
     self.frame_list = []
     self.output_list = []
-    self.i = 0
+
+    # To add to existing data
+    if "load" in sys.argv:
+      file_list = os.listdir("data")
+      count = len([item for item in file_list if "output" in item])
+
+    self.i = count*10
     self.sample_size = sample_size
 
   def keyPressEvent(self,e):

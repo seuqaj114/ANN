@@ -2,6 +2,7 @@ from random import random
 import numpy as np 
 from pprint import pprint
 from utils.math import sigmoid, vvT
+from numpy.linalg import norm
 
 sigmoid_vec = np.vectorize(sigmoid)
 
@@ -79,7 +80,7 @@ class Network():
 				biases_update += delta[i]
 
 
-			#print "weights %s" % weights_update
+			print "weights %s" % weights_update
 			#print "biases %s" % biases_update
 
 			self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
@@ -112,10 +113,12 @@ class Network():
 		if method == "bgd":
 			for i in range(epochs):
 				self.bgd(training_set,eta)
+				print norm(self.apply(training_set[0][0])-np.array(training_set[0][1]))
 				print "epoch: %s" % i
 		elif method == "sgd":
 			for i in range(epochs):
 				self.sgd(training_set,eta)
+				print norm(self.apply(training_set[0][0])-np.array(training_set[0][1]))
 				print "epoch: %s" % i
 		else:
 			print "ERROR - Allowed methods: \"bgd\", \"sgd\""

@@ -1,3 +1,5 @@
 *.pyc
 pics*.npy
 output*.npy
+pics/pic*.jpg
+lel.npy

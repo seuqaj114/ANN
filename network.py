@@ -16,7 +16,7 @@ class Network():
 
 		#self.weights = [np.ones((y,x))*50.0 for x,y in zip(sizes[:-1],sizes[1:])]
 		self.biases = [np.array([random() for i in range(y)]) for y in sizes[1:]]
-		self.weights = [np.random.randn(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
+		self.weights = [np.random.rand(y,x) for x,y in zip(sizes[:-1],sizes[1:])]
 		#self.biases = [np.random.randn(y,1) for y in sizes[1:]]
 
 	def apply(self,a_i,batch=False):
@@ -52,6 +52,7 @@ class Network():
 
 		for w,a in zip(self.weights[-1:0:-1],a_mat[-2:0:-1]):
 			delta.append(np.dot(w.transpose(),delta[-1])*a*(1-a))
+			#delta.append(np.dot(w.transpose(),delta[-1]))
 
 		return delta[-1::-1], a_mat
 
@@ -122,3 +123,11 @@ class Network():
 				print "epoch: %s" % i
 		else:
 			print "ERROR - Allowed methods: \"bgd\", \"sgd\""
+
+	def randomize(self,training_set,epochs):
+		for i in range(epochs):
+			self.biases = [np.array([(random()-0.5)*0.001 for i in range(y)]) for y in self.sizes[1:]]
+			self.weights = [(np.random.rand(y,x)-0.5)*0.001 for x,y in zip(self.sizes[:-1],self.sizes[1:])]
+			print self.weights[0][0]
+			print self.apply(training_set[0][0])
+			print norm(self.apply(training_set[0][0])-np.array(training_set[0][1]))

@@ -14,5 +14,5 @@ def vvT(v1,v2):
 	return v1.reshape((len(v1),1))*np.tile(v2,(len(v1),1))
 
 def sigmoid(z):
-	return 1.0/(1.0+np.exp(-z))
-
+	#return 1.0/(1.0+np.exp(-z))
+	return z

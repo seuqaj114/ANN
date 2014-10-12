@@ -4,7 +4,11 @@ from pprint import pprint
 from utils.math import sigmoid, vvT
 from numpy.linalg import norm
 
-sigmoid_vec = np.vectorize(sigmoid)
+def sig(z):
+	return z
+
+#sigmoid_vec = np.vectorize(sigmoid)
+sigmoid_vec = np.vectorize(sig)
 
 class Network():
 	def __init__(self,sizes):
@@ -51,8 +55,8 @@ class Network():
 		delta.append(a_mat[-1]-y)
 
 		for w,a in zip(self.weights[-1:0:-1],a_mat[-2:0:-1]):
-			delta.append(np.dot(w.transpose(),delta[-1])*a*(1-a))
-			#delta.append(np.dot(w.transpose(),delta[-1]))
+			#delta.append(np.dot(w.transpose(),delta[-1])*a*(1-a))
+			delta.append(np.dot(w.transpose(),delta[-1]))
 
 		return delta[-1::-1], a_mat
 

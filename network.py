@@ -7,8 +7,8 @@ from numpy.linalg import norm
 def sig(z):
 	return z
 
-#sigmoid_vec = np.vectorize(sigmoid)
-sigmoid_vec = np.vectorize(sig)
+sigmoid_vec = np.vectorize(sigmoid)
+#sigmoid_vec = np.vectorize(sig)
 
 class Network():
 	def __init__(self,sizes):

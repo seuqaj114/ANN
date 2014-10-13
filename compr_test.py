@@ -1,4 +1,5 @@
 from compr_set import get_training_set
+from genetic.genetic import Body
 
 import numpy as np
 from random import random
@@ -12,10 +13,9 @@ b2 = np.array([random() for i in range(103680)])
 B2 = np.array([b2 for i in range(8)])
 B2 = B2.transpose()
 
-b1 = np.array([random() for i in range(3)])
-B1 = np.array([b1 for i in range(8)])
-B1 = B1.transpose()
+E = X_-B2
 
-A1 = np.random.rand(3,8)
+body = Body(E)
+body.randomize(10000)
 
 #A2 = np.dot(np.dot(X_-B2,(A1+B1).transpose()),linalg.inv(np.dot(A1+B1,(A1+B1).transpose())))

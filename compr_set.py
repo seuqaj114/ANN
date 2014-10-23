@@ -1,9 +1,13 @@
 import numpy as np
 import Image
 
-def get_image_array(i):
+def get_image_array(i,normalized=True):
 	img = Image.open("pics/pic%s.jpg" % i).convert("LA")
-	pic = [t[0]/255.0 for t in img.getdata()]
+
+	if normalized == True:
+		pic = [t[0]/255.0 for t in img.getdata()]
+	else:
+		pic = [t[0] for t in img.getdata()]
 
 	return pic
 

@@ -25,3 +25,25 @@ def conditional_np_array(a_i):
 		return a_i
 	elif type(a_i).__name__ == "list":
 		return np.array(a_i)
+
+def bubble_sort(l):
+	unord = list(l)
+	count = 0
+
+	while(1):
+		p = 0
+		for i in range(1,len(unord)):
+			if unord[i]<unord[i-1]:
+				aux = unord[i-1]
+				unord[i-1] = unord[i]
+				unord[i] = aux
+				p = 1
+				count+=1
+				#print unord
+
+		if p == 0:
+			break
+
+	print "Operations till ordered: %s" % count
+
+	return unord

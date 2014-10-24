@@ -47,3 +47,18 @@ def bubble_sort(l):
 	print "Operations till ordered: %s" % count
 
 	return unord
+
+def counting_sort(l):
+	unord = list(l)
+
+	store = [0]*256
+
+	for value in unord:
+		store[value] += 1
+
+	ordered = []
+
+	for i in range(len(store)):
+		ordered += [i]*store[i]
+
+	return ordered

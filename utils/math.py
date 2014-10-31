@@ -1,6 +1,9 @@
 from numpy.linalg import norm
 import numpy as np
 
+#max of 2nd derivative of tanh: 0.761
+
+
 def average(vec):
 	return sum(vec)/float(len(vec))
 

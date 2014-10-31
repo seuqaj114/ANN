@@ -17,7 +17,12 @@ def get_binary_array(i,size):
 
 	return map(int,[j for j in binary])
 
+def get_binary_extended_array(i,size):
+	binary = [0]*size
+	binary[i] = 1
+	return binary
+
 def get_training_set(size):
-	training_set = [(get_binary_array(i,size),get_image_array(i)) for i in range(size)]
+	training_set = [(get_binary_extended_array(i,size),get_image_array(i)) for i in range(size)]
 
 	return training_set

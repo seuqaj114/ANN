@@ -25,8 +25,10 @@ if __name__ == "__main__":
 
 		print "epoch %s complete" % i
 
-		print net.apply(np.load("data/pics4.npy")[-2])
-		print net.apply(np.load("data/pics4.npy")[-1])
+		print net.apply(np.load("data/pics0.npy")[-2])
+		print np.load("data/output0.npy")[-2]
+		print net.apply(np.load("data/pics0.npy")[-1])
+		print np.load("data/output0.npy")[-1]
 
 
 	save_session(net.weights,net.biases)

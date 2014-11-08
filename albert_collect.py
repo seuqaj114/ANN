@@ -81,7 +81,7 @@ class MainWindow(QtGui.QMainWindow):
     if (self.i+1)/10 != self.i/10:
       np.save("data/pics%s.npy" % (self.i/10),self.frame_list)
       np.save("data/output%s.npy" % (self.i/10),self.output_list)
-      print "Output %s" % self.output_list
+      #print "Output %s" % self.output_list
       print "File %s saved" % (self.i/10)
       self.frame_list = []
       self.output_list = []
@@ -109,7 +109,7 @@ class MainWindow(QtGui.QMainWindow):
       self.timer.stop()
       print "Done!"
 
-time_step = 1000 #miliseconds
+time_step = 1100 #miliseconds
 
 app = QtGui.QApplication(sys.argv)
 window = MainWindow(url,sample_size)

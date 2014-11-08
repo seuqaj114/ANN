@@ -18,6 +18,8 @@ if __name__ == "__main__":
 	net.weights, net.biases = load_session()
 	print "Parameters loaded"
 
+	print net.weights[1].shape
+
 	serial = serial.Serial("/dev/ttyACM0",9600)
 
 	driver = webdriver.Firefox()
@@ -31,6 +33,7 @@ if __name__ == "__main__":
 		src = image.get_attribute("src")
 		urlretrieve(src,"pics/captcha.jpg")
 		print "Image captured."
+		time.sleep(1.5)
 		img = Image.open("pics/captcha.jpg").convert("LA")
 		pic = [t[0]/255.0 for t in img.getdata()]
 

@@ -17,8 +17,8 @@ class Network():
 		#self.weights= [np.array([[ 60.0,  60.0],[ 80.0,  80.0]]), np.array([[ -60.0, 60.0  ]])]
 
 		#self.weights = [np.ones((y,x))*50.0 for x,y in zip(sizes[:-1],sizes[1:])]
-		self.biases = [np.array([(random()*2.0-1.0) for i in range(y)]) for y in sizes[1:]]
-		self.weights = [(np.random.rand(y,x)*2.0-1.0) for x,y in zip(sizes[:-1],sizes[1:])]
+		self.biases = [np.array([random() for i in range(y)]) for y in sizes[1:]]
+		self.weights = [(np.random.rand(y,x)) for x,y in zip(sizes[:-1],sizes[1:])]
 		#self.biases = [np.random.randn(y,1) for y in sizes[1:]]
 
 	def apply(self,a_i,batch=False):
@@ -28,6 +28,7 @@ class Network():
 			a=np.array(a_i)
 
 			for w,b in zip(self.weights,self.biases):
+				#print w.shape, a.shape,b.shape
 				a=sigmoid_vec(np.dot(w,a)+b)
 
 		elif batch == True:
@@ -42,6 +43,7 @@ class Network():
 		a_mat=[np.array(a_i)]
 
 		for w,b in zip(self.weights,self.biases):
+			#print w.shape, a_mat[-1].shape, b.shape
 			a_mat.append(sigmoid_vec(np.dot(w,a_mat[-1])+b))
 
 		return a_mat
@@ -53,8 +55,8 @@ class Network():
 		delta.append(a_mat[-1]-y)
 
 		for w,a in zip(self.weights[-1:0:-1],a_mat[-2:0:-1]):
-			delta.append(np.dot(w.transpose(),delta[-1])*a*(1-a))
-			#delta.append(np.dot(w.transpose(),delta[-1]))
+			#delta.append(np.dot(w.transpose(),delta[-1])*a*(1-a))
+			delta.append(np.dot(w.transpose(),delta[-1]))
 
 		return delta[-1::-1], a_mat
 
@@ -70,7 +72,7 @@ class Network():
 		each entry corresponds to a training example (x,y)
 		"""
 		backprop_params=[self.backprop(x,y) for x,y in training_set]	
-		pprint(backprop_params[0][0][0])
+		#pprint(backprop_params[0][0][0])
 
 		for i in xrange(self.num_layers-1):
 			weights_update = np.zeros(self.weights[i].shape)
@@ -89,7 +91,7 @@ class Network():
 			self.weights[i] = self.weights[i] - (eta/len(training_set))*weights_update
 			self.biases[i] = self.biases[i] - (eta/len(training_set))*biases_update
 
-	def sgd(self,training_set,eta,mini_batch_size=10):
+	def sgd(self,training_set,eta,mini_batch_size=1):
 		"""
 		training_set must be a list of tuples (x,y)
 		x is the input
@@ -179,7 +181,7 @@ class tanhNetwork(Network):
 
 		for w,a in zip(self.weights[-1:0:-1],a_mat[-2:0:-1]):
 			delta.append(np.dot(w.transpose(),delta[-1])*(1-a*a))
-			if max(delta[-1])>1.0:
+			if max(delta[-1])>1.0 or min(delta[-1]) < 1.0:
 				delta[-1] = delta[-1]/np.sqrt(sum([item**2 for item in delta[-1]]))
 			#delta.append(np.dot(w.transpose(),delta[-1]))
 

@@ -21,14 +21,14 @@ if __name__ == "__main__":
 
 			training_set = zip(training_input,training_output)
 
-			net.bgd(training_set,2.0)
+			net.bgd(training_set,5.0)
 
 		print "epoch %s complete" % i
 
-		print net.apply(np.load("data/pics0.npy")[-2])
-		print np.load("data/output0.npy")[-2]
-		print net.apply(np.load("data/pics0.npy")[-1])
-		print np.load("data/output0.npy")[-1]
+		print net.apply(np.load("data/pics3.npy")[-2])
+		print np.load("data/output3.npy")[-2]
+		print net.apply(np.load("data/pics4.npy")[-1])
+		print np.load("data/output4.npy")[-1]
 
 
 	save_session(net.weights,net.biases)

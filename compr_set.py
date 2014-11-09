@@ -1,6 +1,16 @@
 import numpy as np
 import Image
 
+def get_meme_array(normalized=True):
+	img = Image.open("pics/meme.jpg").convert("LA")
+
+	if normalized == True:
+		pic = [((t[0]/255.0)*2.0-1.0)*0.761 for t in img.getdata()]
+	else:
+		pic = [t[0] for t in img.getdata()]
+
+	return pic
+
 def get_image_array(i,normalized=True):
 	img = Image.open("pics/pic%s.jpg" % i).convert("LA")
 

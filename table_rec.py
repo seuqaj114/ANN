@@ -1,5 +1,5 @@
 import numpy as np 
-import Image, ImageDraw
+import Image, ImageDraw, ImageFilter
 import sys
 import matplotlib.pyplot as pyplot
 import time
@@ -42,9 +42,22 @@ print "max: %s; min %s" % (MAX_GRAY,MIN_GRAY)
 print "average: %s" % ((MAX_GRAY+MIN_GRAY)/2)
 
 contrast_image = main_image.point(lambda x: 0 if x <= (MAX_GRAY+MIN_GRAY)/2 else 255)
-contrast_image = contrast_image.resize((contrast_image.size[0]/4,contrast_image.size[1]/4))
+contrast_image = contrast_image.resize((contrast_image.size[0]/2,contrast_image.size[1]/2))
 print contrast_image.size
 contrast_image.show()
+
+"""
+contrast_image2 = main_image.point(lambda x: int((x-MIN_GRAY)*255.0/(MAX_GRAY-MIN_GRAY)))
+contrast_image2 = contrast_image2.resize((contrast_image2.size[0]/4,contrast_image2.size[1]/4))
+contrast_image2 = contrast_image2.filter(ImageFilter.CONTOUR)
+contrast_pic2 = [t[0] for t in contrast_image2.getdata()]
+MAX_GRAY2 = max(contrast_pic2)
+MIN_GRAY2 = min(contrast_pic2)
+contrast_image2 = contrast_image2.point(lambda x: 0 if x <= (MAX_GRAY+MIN_GRAY)/2 else 255)
+
+contrast_image2.show()
+contrast_image2 = contrast_image2.filter(ImageFilter.BLUR)
+"""
 
 
 #	Look for a rectangle around the table in the image
@@ -112,6 +125,8 @@ croped_image = contrast_image.crop(map(int,(
 #croped_image.show()
 
 #	Draw the center of the estimated positions of the numbers
+
+"""
 draw = ImageDraw.Draw(croped_image)
 for i in range(ROWS):
 	for j in range(COLS):
@@ -121,7 +136,7 @@ for i in range(ROWS):
 			(croped_image.size[0]/COLS)/2+j*(croped_image.size[0]/COLS)+4,
 			(croped_image.size[1]/ROWS)/2+i*(croped_image.size[1]/ROWS)+4
 		),fill=128)
-
+"""
 croped_image.show()
 
 
@@ -135,51 +150,83 @@ croped_image.show()
 #for i in range(ROWS):
 #	for j in range(COLS):
 #	The (0,0) cell
-i = 0
-j = 0
 
-#	Set the search limits
-WIDTH_MIN = j*croped_image.size[0]/COLS
-WIDTH_MAX = croped_image.size[0]/COLS + j*croped_image.size[0]/COLS
-HEIGHT_MIN = i*croped_image.size[1]/ROWS
-HEIGHT_MAX = croped_image.size[1]/ROWS + i*croped_image.size[1]/ROWS
+print croped_image.size
 
-#	Set search rectangle's geometry
-BASE_WIDTH = WIDTH_MAX - WIDTH_MIN
-BASE_HEIGHT = HEIGHT_MAX - HEIGHT_MIN
-RECT_CENTER = (WIDTH_MIN + BASE_WIDTH/2,HEIGHT_MIN+BASE_HEIGHT/2)
+for i in range(1):
+	for j in range(1):
+		#	Set the search limits
+		WIDTH_MIN = j*croped_image.size[0]/COLS
+		WIDTH_MAX = croped_image.size[0]/COLS + j*croped_image.size[0]/COLS
+		HEIGHT_MIN = i*croped_image.size[1]/ROWS
+		HEIGHT_MAX = croped_image.size[1]/ROWS + i*croped_image.size[1]/ROWS
 
-#	Set rectangle's ratio ( > 0 )
-RECT_RATIO = float(BASE_WIDTH)/BASE_HEIGHT
+		#	Set search rectangle's geometry
+		BASE_WIDTH = WIDTH_MAX - WIDTH_MIN
+		BASE_HEIGHT = HEIGHT_MAX - HEIGHT_MIN
+		RECT_CENTER = (WIDTH_MIN + BASE_WIDTH/2,HEIGHT_MIN+BASE_HEIGHT/2)
 
-#	Search cicle, rectangles from outside to center
-cell_count_array = []
-for inc in range((BASE_HEIGHT/2)/2):
-	croped_cell = croped_image.crop(map(int,(
-		RECT_CENTER[0]-(BASE_WIDTH/2-inc*RECT_RATIO),
-		RECT_CENTER[1]-(BASE_HEIGHT/2-inc),
-		RECT_CENTER[0]+(BASE_WIDTH/2-inc*RECT_RATIO),
-		RECT_CENTER[1]+(BASE_HEIGHT/2-inc)
-		)))
-	#if inc%5 == 0:
-	#	croped_cell.show()
-	croped_cell_pic = [t[0] for t in croped_cell.getdata()]
-	cell_count_array.append(croped_cell_pic.count(0))
-	print cell_count_array[-1]
+		print RECT_CENTER
 
-#	Find minimum of number of pixels rate of change
-cell_slope_array = [abs(cell_count_array[i]-cell_count_array[i-1]) for i in range(1,len(cell_count_array))]
-cell_height = cell_slope_array.index(min(cell_slope_array))
 
-#	Get croped cell (final)
-croped_cell = croped_image.crop(map(int,(
-		RECT_CENTER[0]-(BASE_WIDTH/2-cell_height*RECT_RATIO),
-		RECT_CENTER[1]-(BASE_HEIGHT/2-cell_height),
-		RECT_CENTER[0]+(BASE_WIDTH/2-cell_height*RECT_RATIO),
-		RECT_CENTER[1]+(BASE_HEIGHT/2-cell_height)
-		)))	
+		#	Set rectangle's ratio ( > 0 )
+		RECT_RATIO = float(BASE_WIDTH)/BASE_HEIGHT
 
-croped_cell.show()
+		"""
+		croped_cell = croped_image.crop(map(int,(
+			RECT_CENTER[0]-(BASE_WIDTH/2),
+			RECT_CENTER[1]-(BASE_HEIGHT/2),
+			RECT_CENTER[0]+(BASE_WIDTH/2),
+			RECT_CENTER[1]+(BASE_HEIGHT/2)
+			))).show()
+		"""
+
+		#	Search cicle, rectangles from outside to center
+		cell_count_array = []
+		for inc in range((BASE_HEIGHT/2)/2):
+			croped_cell = croped_image.crop(map(int,(
+				RECT_CENTER[0]-(BASE_WIDTH/2-inc*RECT_RATIO),
+				RECT_CENTER[1]-(BASE_HEIGHT/2-inc),
+				RECT_CENTER[0]+(BASE_WIDTH/2-inc*RECT_RATIO),
+				RECT_CENTER[1]+(BASE_HEIGHT/2-inc)
+				)))
+			#if inc%5 == 0:
+			#	croped_cell.show()
+			croped_cell_pic = [t[0] for t in croped_cell.getdata()]
+			cell_count_array.append(croped_cell_pic.count(0))
+			#print cell_count_array[-1]
+
+		#	Find minimum of number of pixels rate of change
+		cell_slope_array = [abs(cell_count_array[k]-cell_count_array[k-1]) for k in range(1,len(cell_count_array))]
+		cell_height = cell_slope_array.index(min(cell_slope_array))
+
+		#	Get croped cell (final)
+		croped_cell = croped_image.crop(map(int,(
+				RECT_CENTER[0]-(BASE_WIDTH/2-cell_height*RECT_RATIO),
+				RECT_CENTER[1]-(BASE_HEIGHT/2-cell_height),
+				RECT_CENTER[0]+(BASE_WIDTH/2-cell_height*RECT_RATIO),
+				RECT_CENTER[1]+(BASE_HEIGHT/2-cell_height)
+				)))	
+
+		#croped_cell.show()
+		croped_cell.filter(ImageFilter.SMOOTH).show()
+
+		#	Crop individual digit
+		croped_cell_pic = np.array([t[0] for t in croped_cell.getdata()]).reshape(croped_cell.size[0],croped_cell.size[1]).transpose()	
+
+		for m in range(croped_cell_pic.shape[0]):
+			if len(filter(lambda x: x!=255, croped_cell_pic[m]))!=0 :
+				col1 = m
+				break
+
+		for n in range(col1,croped_cell_pic.shape[0]):
+			if len(filter(lambda x: x!=255, croped_cell_pic[m]))==0:
+				col2 = n
+				break
+
+		print "m=%s n=%s" % (m,n)
+
+		croped_cell.crop((m,0,n,croped_cell.size[1])).show()
 
 finish = time.time()
 elapsed = finish-start

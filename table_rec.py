@@ -2,7 +2,7 @@ import numpy as np
 import Image, ImageDraw
 import sys
 import matplotlib.pyplot as pyplot
-
+import time
 """
 Steps: 
 	- expand values to full range
@@ -14,7 +14,12 @@ Steps:
 
 To do:
 	- remove noise before cropping around table
+	- consider if abs is usefull, if negative minimum of slope can be used for cell cropping
 """
+
+
+
+start = time.time()
 
 #	Only working for vertical tables by now!
 
@@ -127,6 +132,8 @@ croped_image.show()
 #	Run ever smaller rectangles over a cell to isolate the number
 #	Just running over the top-left-most cell
 
+#for i in range(ROWS):
+#	for j in range(COLS):
 #	The (0,0) cell
 i = 0
 j = 0
@@ -147,14 +154,15 @@ RECT_RATIO = float(BASE_WIDTH)/BASE_HEIGHT
 
 #	Search cicle, rectangles from outside to center
 cell_count_array = []
-for inc in range(BASE_HEIGHT/2):
+for inc in range((BASE_HEIGHT/2)/2):
 	croped_cell = croped_image.crop(map(int,(
 		RECT_CENTER[0]-(BASE_WIDTH/2-inc*RECT_RATIO),
 		RECT_CENTER[1]-(BASE_HEIGHT/2-inc),
 		RECT_CENTER[0]+(BASE_WIDTH/2-inc*RECT_RATIO),
 		RECT_CENTER[1]+(BASE_HEIGHT/2-inc)
 		)))
-
+	#if inc%5 == 0:
+	#	croped_cell.show()
 	croped_cell_pic = [t[0] for t in croped_cell.getdata()]
 	cell_count_array.append(croped_cell_pic.count(0))
 	print cell_count_array[-1]
@@ -163,15 +171,16 @@ for inc in range(BASE_HEIGHT/2):
 cell_slope_array = [abs(cell_count_array[i]-cell_count_array[i-1]) for i in range(1,len(cell_count_array))]
 cell_height = cell_slope_array.index(min(cell_slope_array))
 
-pyplot.plot(cell_slope_array)
-pyplot.show()
-
 #	Get croped cell (final)
 croped_cell = croped_image.crop(map(int,(
 		RECT_CENTER[0]-(BASE_WIDTH/2-cell_height*RECT_RATIO),
 		RECT_CENTER[1]-(BASE_HEIGHT/2-cell_height),
 		RECT_CENTER[0]+(BASE_WIDTH/2-cell_height*RECT_RATIO),
 		RECT_CENTER[1]+(BASE_HEIGHT/2-cell_height)
-		)))
+		)))	
 
 croped_cell.show()
+
+finish = time.time()
+elapsed = finish-start
+print "Time elapsed: %s" % elapsed

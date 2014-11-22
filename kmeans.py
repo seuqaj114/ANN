@@ -88,3 +88,51 @@ def horizontal_kmeans(image,width,height,epochs,clusters=None):
 		clusters = [location/count for location, count in zip(location_array,count_array)]
 
 	return clusters
+
+def horizontal_flat_kmeans(image,width,height,epochs,clusters=None):
+
+	"""
+		image must be a width x height matrix, in standard grayscale 0-255
+	"""
+
+	if type(width) != int or type(height) != int:
+		return "ERROR - width and height must be integers!"
+
+	image = np.array(image)
+
+	dots = []
+	for i in range(len(image)):
+		for j in range(len(image[i])):
+			if image[i][j] < 140:
+				dots.append([i,j])
+
+	dots = [[x[0],height/2] for x in dots]
+	flat_dots=[]
+	for x in dots:
+		if x not in flat_dots:
+			flat_dots.append(x)
+
+	print "Dots: %s" % (len(dots))
+
+	if not clusters:
+		n_clusters = width*height
+	else:
+		n_clusters = clusters
+
+	clusters = [[random()*width,height/2] for i in range(n_clusters)]
+
+	for j in range(epochs):
+		print j
+		location_array = np.array([[0,0]]*n_clusters)
+		count_array = [0]*n_clusters
+
+		for dot in flat_dots:
+			distance_array = [euclid_distance(dot,cluster) for cluster in clusters]
+			min_index = distance_array.index(min(distance_array))
+			location_array[min_index] += np.array(dot)
+			count_array[min_index] += 1
+			#print count_array
+
+		clusters = [location/count for location, count in zip(location_array,count_array)]
+
+	return clusters

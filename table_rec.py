@@ -208,12 +208,13 @@ for i in range(1):
 				RECT_CENTER[1]+(BASE_HEIGHT/2-cell_height)
 				)))	
 
-		#croped_cell.show()
-		croped_cell.filter(ImageFilter.SMOOTH).show()
+		croped_cell.show()
+		#croped_cell.filter(ImageFilter.SMOOTH).show()
 
 		#	Crop individual digit
 		croped_cell_pic = np.array([t[0] for t in croped_cell.getdata()]).reshape(croped_cell.size[0],croped_cell.size[1]).transpose()	
 
+		"""
 		for m in range(croped_cell_pic.shape[0]):
 			if len(filter(lambda x: x!=255, croped_cell_pic[m]))!=0 :
 				col1 = m
@@ -227,6 +228,7 @@ for i in range(1):
 		print "m=%s n=%s" % (m,n)
 
 		croped_cell.crop((m,0,n,croped_cell.size[1])).show()
+		"""
 
 finish = time.time()
 elapsed = finish-start

@@ -1,13 +1,31 @@
+#!/usr/bin/env python
+
 import numpy as np
 from random import random
 import sys
 from math import sqrt
 
+def get_threshold_dots(pic,threshold):
+	"""
+		Get the array of coordinates of dots below threshold
+	"""
+
+	dots = []
+	for i in range(len(pic)):
+		for j in range(len(pic[i])):
+			if pic[i][j] < threshold:
+				dots.append([i,j])
+
+	return np.array(dots)
+
+
 def euclid_distance(x1,x2):
 	#	x1 and x2 must be array-like objects
 	return sqrt((x1[0]-x2[0])**2+(x1[1]-x2[1])**2)
 
-def kmeans(image,width,height,epochs,clusters=None):
+def kmeans(image,width,height,epochs,clusters=None,threshold=140):
+
+	#	Change this image to pic
 
 	if type(width) != int or type(height) != int:
 		return "ERROR - width and height must be integers!"
@@ -17,7 +35,7 @@ def kmeans(image,width,height,epochs,clusters=None):
 	dots = []
 	for i in range(len(image)):
 		for j in range(len(image[i])):
-			if image[i][j] < 140:
+			if image[i][j] < threshold:
 				dots.append([i,j])
 
 	print "Dots: %s" % (len(dots))
@@ -30,7 +48,7 @@ def kmeans(image,width,height,epochs,clusters=None):
 	clusters = [[random()*width,random()*height] for i in range(n_clusters)]
 
 	for j in range(epochs):
-		print j
+		#print j
 		location_array = np.array([[0,0]]*n_clusters)
 		count_array = [0]*n_clusters
 
@@ -45,7 +63,7 @@ def kmeans(image,width,height,epochs,clusters=None):
 
 	return clusters
 
-def horizontal_kmeans(image,width,height,epochs,clusters=None):
+def horizontal_kmeans(image,width,height,epochs,clusters=None,threshold=140):
 
 	"""
 		image must be a width x height matrix, in standard grayscale 0-255
@@ -59,7 +77,7 @@ def horizontal_kmeans(image,width,height,epochs,clusters=None):
 	dots = []
 	for i in range(len(image)):
 		for j in range(len(image[i])):
-			if image[i][j] < 140:
+			if image[i][j] < threshold:
 				dots.append([i,j])
 
 	dots = [[x[0],height/2] for x in dots]
@@ -89,7 +107,7 @@ def horizontal_kmeans(image,width,height,epochs,clusters=None):
 
 	return clusters
 
-def horizontal_flat_kmeans(image,width,height,epochs,clusters=None):
+def horizontal_flat_kmeans(image,width,height,epochs,clusters=None,threshold=140):
 
 	"""
 		image must be a width x height matrix, in standard grayscale 0-255
@@ -103,7 +121,7 @@ def horizontal_flat_kmeans(image,width,height,epochs,clusters=None):
 	dots = []
 	for i in range(len(image)):
 		for j in range(len(image[i])):
-			if image[i][j] < 140:
+			if image[i][j] < threshold:
 				dots.append([i,j])
 
 	dots = [[x[0],height/2] for x in dots]

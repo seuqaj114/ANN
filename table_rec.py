@@ -19,6 +19,52 @@ To do:
 
 
 
+def image_to_matrix(image):
+	"""
+		Receives an image and returns its numpy matrix representation,
+		with correct height and width.
+		The returned matrix is is grayscale 0-255.
+	"""
+
+	pic = np.array([t[0] for t in image.getdata()]).reshape(image.size[::-1])
+
+	return pic
+
+def get_optimal_clusters(cell,threshold=140):
+	"""
+		This function receives an Image object and returns the optimal
+		number of clusters, representing number of digits.
+
+		Method: find the number of clusters for which the average of the
+				variances is minimum.
+
+		Number of clusters limited to 7 so far, to avoid having to use optimization.
+	"""
+
+	#	Turn image to numpy array
+	pic = image_to_matrix(cell)
+
+	#	Get the array of coordinates of dark dots
+	dots = get_threshold_dots(pic,threshold)
+
+	for n_clusters in range(1,8):
+		clusters = kmeans.kmeans(pic,pic.shape[0],pic.shape[1],100,n_clusters,threshold)
+		print clusters
+
+		square_sum_array = [0]*n_clusters
+		count_array = [0]*n_clusters
+
+		for dot in dots:
+			distance_array = [kmeans.euclid_distance(dot,cluster) for cluster in clusters]
+			min_index = distance_array.index(min(distance_array))
+			square_sum_array[min_index] += kmeans.euclid_distance(clusters[min_index],dot)
+			count_array[min_index] += 1
+
+		variances = [square_sum/(count+0.001) for square_sum, count in zip(square_sum_array,count_array)]
+
+		print variances
+
+
 start = time.time()
 
 #	Only working for vertical tables by now!

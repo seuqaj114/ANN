@@ -17,6 +17,36 @@ To do:
 	- consider if abs is usefull, if negative minimum of slope can be used for cell cropping
 """
 
+def get_same_kind_set(array,kind):
+	"""
+		Returns an array of arrays that are the consecutive sets
+		of entry's matching kind.
+	"""
+
+	resulting_set=[]
+
+	i=0
+	if array[i]==kind:
+		count=1
+	else:
+		count=0
+
+	while i<len(array):
+		
+		if array[i]==kind:
+			count+=1
+		elif array[i]!=kind and array[i-1]==kind:
+			resulting_set.append([kind]*count)
+			count=0
+		else:
+			pass
+
+		i+=1
+
+	if count>0:
+		resulting_set.append([kind]*count)
+
+	return resulting_set
 
 
 def image_to_matrix(image):
@@ -47,8 +77,10 @@ def get_optimal_clusters(cell,threshold=140):
 	#	Get the array of coordinates of dark dots
 	dots = get_threshold_dots(pic,threshold)
 
-	for n_clusters in range(1,8):
-		clusters = kmeans.kmeans(pic,pic.shape[0],pic.shape[1],100,n_clusters,threshold)
+	scores = []
+
+	for n_clusters in range(1,10):
+		clusters = kmeans.kmeans(pic,pic.shape[0],pic.shape[1],50,n_clusters,threshold)
 		print clusters
 
 		square_sum_array = [0]*n_clusters
@@ -63,6 +95,11 @@ def get_optimal_clusters(cell,threshold=140):
 		variances = [square_sum/(count+0.001) for square_sum, count in zip(square_sum_array,count_array)]
 
 		print variances
+		scores.append(sum(variances)/len(variances))
+
+	
+
+	return scores
 
 
 start = time.time()

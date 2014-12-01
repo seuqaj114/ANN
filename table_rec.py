@@ -17,10 +17,19 @@ To do:
 	- consider if abs is usefull, if negative minimum of slope can be used for cell cropping
 """
 
-def get_same_kind_set(array,kind):
+def get_relevant_zones(array,threshold=3):
 	"""
-		Returns an array of arrays that are the consecutive sets
-		of entry's matching kind.
+		Returns only the elements of array whose len(item[0])>threshold.
+		array must be the return of get_same_kind_set
+	"""
+
+	return [item for item in array if len(item)>3]
+
+
+def get_zones(array,kind):
+	"""
+		Returns an array of tuples that contain an array which is a consecutive set
+		of entry's matching kind and the location of the first entry in the set.
 	"""
 
 	resulting_set=[]
@@ -36,7 +45,7 @@ def get_same_kind_set(array,kind):
 		if array[i]==kind:
 			count+=1
 		elif array[i]!=kind and array[i-1]==kind:
-			resulting_set.append([kind]*count)
+			resulting_set.append(([kind]*count,i-count))
 			count=0
 		else:
 			pass
@@ -44,10 +53,30 @@ def get_same_kind_set(array,kind):
 		i+=1
 
 	if count>0:
-		resulting_set.append([kind]*count)
+		resulting_set.append(([kind]*count, i-count))
 
 	return resulting_set
 
+
+
+def column_spectrum(pic,threshold=3):
+	"""
+		Receives a numpy matrix with the correct representation,
+		and thus has to be tranposed to allow horizontal probing.
+
+		It goes through the columns and:
+		- Removes columns that have less than threshold black pixels;
+		- Removes groups of columns that have less than threshold adjacent pixels;
+	"""
+
+	pic_t = pic.transpose()
+	spec = [0]*len(pic_t)
+
+	for i in range(len(pic_t)):
+		if len(filter(lambda x:x==0,pic_t[i])) > threshold:
+			spec[i]=1
+
+	return spec
 
 def image_to_matrix(image):
 	"""

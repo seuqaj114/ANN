@@ -21,7 +21,19 @@ To do:
 
 Na obtencao dos digitos a partir das zonas, decidir o que e digito ou nao a partir nao so do threshold
 mas tambem do desvio em sigmas
+
+test_digit = table_rec.reformat_image(digits[2]).resize((28,28))
+test_pic = np.array([(255-t[0])/255.0 for t in test_digit.getdata()]).reshape((784,1))
+net.feedforward(test_pic)
+
 """
+
+def classify(image,net):
+	test_digit = reformat_image(image).resize((28,28))
+	test_pic = np.array([(255-t[0])/255.0 for t in test_digit.getdata()]).reshape((784,1))
+	res = net.feedforward(test_pic)
+
+	return res, np.argmax(res)
 
 def func(item):
 	return len(item[0])
@@ -36,6 +48,13 @@ def image_to_matrix(image):
 	pic = np.array([t[0] for t in image.getdata()]).reshape(image.size[1],image.size[0])
 
 	return pic
+
+def reformat_image(image):
+	blank = Image.new("RGB",map(int,(image.size[1]*1.1,image.size[1]*1.1)),(255,255,255)).convert("LA")
+
+	blank.paste(image,(blank.size[0]/2-image.size[0]/2,blank.size[1]/2-image.size[1]/2))
+
+	return blank
 
 def get_digits(image,threshold=3):
 	"""
@@ -57,7 +76,7 @@ def get_digit_from_vertical_digit(image,threshold=3):
 	zones = get_zones(spec,1,True,threshold)
 
 	digit_zone = max(zones,key=func)
-	print digit_zone
+	#print digit_zone
 
 	image.crop((0,digit_zone[1],image.size[0],digit_zone[1]+len(digit_zone[0]))).show()
 
@@ -71,8 +90,8 @@ def get_vertical_digits(image,threshold=3):
 
 	vertical_digits = []
 	for zone in zones:
-		print zone
-		print (zone[1]-len(zone[0]),0,zone[1],image.size[1])
+		#print zone
+		#print (zone[1]-len(zone[0]),0,zone[1],image.size[1])
 		vertical_digit = image.crop((zone[1],0,zone[1]+len(zone[0]),image.size[1]))
 		vertical_digits.append(vertical_digit)
 
@@ -295,10 +314,11 @@ def get_cell():
 	#	for j in range(COLS):
 	#	The (0,0) cell
 
-	print croped_image.size
+	#print croped_image.size
 
-	for i in range(1,2):
-		for j in range(1):
+	croped_cells = []
+	for i in range(ROWS):
+		for j in range(COLS):
 			#	Set the search limits
 			WIDTH_MIN = j*croped_image.size[0]/COLS
 			WIDTH_MAX = croped_image.size[0]/COLS + j*croped_image.size[0]/COLS
@@ -353,9 +373,10 @@ def get_cell():
 					)))	
 
 			croped_cell.show()
+			croped_cells.append(croped_cell)
 			#croped_cell.filter(ImageFilter.SMOOTH).show()
 
-	return croped_cell
+	return croped_cells
 
 
 def get_optimal_clusters(cell,threshold=140):

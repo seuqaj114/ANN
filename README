@@ -1,1 +1,4 @@
-Artificial Neural Networks
+Artificial Neural Networks and other cool stuff
+
+This folder includes my neural network implementation and some cool applications I made of it.
+Every file starting with "albert" is referred to my self-driving car software control, automation and training.
